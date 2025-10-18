@@ -63,14 +63,14 @@ Identifying whether 45.33.32.156 was attempting to initiate TCP connections or r
 
 ---
 
-- 5. I/O graph PDF
+ 5. I/O graph PDF
 ![alt text](<Screenshot 2025-10-16 193116.png>)
 Indicated there was a huge spike of packets that lasted roughly 10 seconds
 The huge influx of packets may indicate different types of retransmission, congestion, and/or scans
 
 ---
 
-- 6. Ping/tracert output
+ 6. Ping/tracert output
 ![alt text](<Screenshot 2025-10-15 085129-1.png>)
 Tracert showed the packet path to ip address 45.33.32.156
 ping tested connectivity  to host and how log on average would take to connect to said host.
