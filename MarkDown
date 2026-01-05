@@ -1,0 +1,76 @@
+# Mock Wireshark Project MarkDowwn  
+**Help Desk Ticket: Intermittent Web Access Due to TCP Retransmissions**  
+
+---
+
+### Ticket Details
+- **Reported By:** N. Hall (HR Department)  
+- **Date/Time:** 2025-10-16 14:32 EDT  
+- **System:** Desktop – Windows 11  
+- **IP Address:** 192.*.*.*  
+
+---
+
+### Issue Description
+An HR user reported **slow web browsing and frequent timeouts** when accessing both internal and external websites.  
+The challenge was to determine whether this was a simple connectivity issue or something deeper at the network layer.
+
+---
+
+### Steps I Took
+1. Captured traffic using **Wireshark** to analyze packet behavior.  
+2. Ran **ping** and **tracert** to `www.speedtest.net` to test connectivity and path.  
+3. Reviewed **NIC settings** and link speed for mismatches.  
+
+---
+
+### Findings
+- Wireshark revealed **multiple TCP retransmissions** and **duplicate ACKs** between `192.168.1.4` and `192.168.1.1`.  
+- The **I/O graph** confirmed a burst of retransmissions around the 75‑second mark.  
+- NIC was set to **auto‑negotiation**, while the router supported **1 Gbps full duplex**.  
+
+---
+
+### Remediation
+- Manually set the NIC to **1 Gbps Full Duplex**.  
+- Verified improved performance via ping:  
+  - **0% packet loss**  
+  - **Average latency: 85ms**  
+- Browsing stabilized, and retransmissions dropped significantly.  
+- ✅ Issue resolved.  
+
+---
+
+### Attachments & Observations
+- **Wireshark Screenshots:**  
+  - TCP handshake showing successful SYN‑ACK from `45.33.32.156`.  
+  - Traffic observed on non‑standard ports (`443, 37070–37075, 22`). These appeared ephemeral and used for outbound TCP connections. Recommended monitoring for anomalies, brute force attempts, or malware.  
+  - Cases where **no SYN‑ACK was received**, leading to multiple retransmissions. Possible causes: honeypot, firewall deception, or SSH filtering (verified with `nmap -sV`, manual SSH attempts, and packet inspection).  
+
+- **I/O Graph (PDF):**  
+  - Showed a **10‑second spike of packets**, suggesting retransmissions, congestion, or scanning activity.  
+
+- **Ping/Tracert Output:**  
+  - Tracert mapped the packet path to `45.33.32.156`.  
+  - Ping confirmed connectivity and average response times.  
+
+- **NIC Settings:**  
+  - Changing from auto‑negotiation to **1 Gbps Full Duplex** eliminated retransmissions and stabilized latency.  
+
+---
+
+### Lessons Learned
+This case reinforced several key points:  
+- Always verify **duplex settings** when troubleshooting network performance.  
+- **TCP flags and retransmissions** can reveal hidden issues like congestion, misconfiguration, or even malicious scanning.  
+- Ephemeral ports and retransmission spikes may signal deeper **network or security concerns** worth monitoring.  
+
+---
+
+### Technician
+**Octavius** – SOC Analyst Candidate  
+
+---
+
+### Status
+**Resolved ✅**  
